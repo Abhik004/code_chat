@@ -15,7 +15,7 @@ const Home = () => {
   const navigate =useNavigate();
 
   function startRegister() {
-    navigate('/register');
+    navigate('/authenticate');
   }
 
   return (
@@ -25,11 +25,10 @@ const Home = () => {
           We're working hard to get CodeChat ready for everyone! While we wrap up the finishing touches, we're adding people gradually to make sure nothing breaks.
         </p>
         <div>
-          <Button onClick={startRegister} text="Get your username" />
+          <Button onClick={startRegister} text="Let's Do It!" />
         </div>
         <div className={styles.signinWrapper}>
           <span className={styles.hasInvite}>Have an invite text?</span>
-          <Link style={signInLink} to="/login">SignIn</Link>
         </div>
       </Card>
     </div>
