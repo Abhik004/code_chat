@@ -1,10 +1,9 @@
 const OtpService = require('../services/otp-service');
 const HashService = require('../services/hash-service');
-const UserService = require('../services/user-service'); // Assuming you have a user service for user-related operations
+const UserService = require('../services/user-service');
 const TokenService = require('../services/token-service');
 
 class AuthController {
-    // Send OTP to the user's phone number
     async sendOtp(req, res) {
         const { phone } = req.body;
 
@@ -30,7 +29,6 @@ class AuthController {
         }
     }
 
-    // Verify the OTP provided by the user
     async verifyOtp(req, res) {
         const { otp, hash, phone } = req.body;
 
@@ -39,7 +37,7 @@ class AuthController {
         }
 
         const [hashOtp, expires] = hash.split('.');
-        if (Date.now() > +expires) { // + sign to explicitly convert to int
+        if (Date.now() > +expires) {
             return res.status(400).json({ message: "OTP expired" });
         }
 
@@ -50,17 +48,14 @@ class AuthController {
             return res.status(400).json({ message: "Invalid OTP" });
         }
 
-        // Optionally, you can register or log in the user here
-        // Assuming you have a findOrCreate method in UserService to manage user records
         let user;
         try {
-            user = await UserService.findOrCreate({ phone });
+            user = await UserService.findOrCreate({ phone }, { phone });
         } catch (err) {
             console.error('Error finding/creating user:', err);
             return res.status(500).json({ message: 'Internal server error' });
         }
 
-        // Generate JWT tokens
         const tokens = TokenService.generateAccessToken({ id: user._id, phone });
 
         return res.json({

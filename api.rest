@@ -12,6 +12,6 @@ Content-Type: application/json
 
 {
 "phone": "+917908310533",
-"otp":"2506",
+"otp":"3906",
 "hash":"secret"
 }
