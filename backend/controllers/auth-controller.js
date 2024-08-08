@@ -2,6 +2,8 @@ const OtpService = require('../services/otp-service');
 const HashService = require('../services/hash-service');
 const UserService = require('../services/user-service');
 const TokenService = require('../services/token-service');
+const UserDto=require('../dtos/user-dto');
+
 
 class AuthController {
     async sendOtp(req, res) {
@@ -57,9 +59,10 @@ class AuthController {
         }
 
         const tokens = TokenService.generateAccessToken({ id: user._id, phone });
-
+        const userDto=new UserDto(user);
         return res.json({
             message: "OTP verified successfully",
+            user:userDto,
             ...tokens
         });
     }
