@@ -3,6 +3,7 @@ const HashService = require('../services/hash-service');
 const UserService = require('../services/user-service');
 const TokenService = require('../services/token-service');
 const UserDto=require('../dtos/user-dto');
+const tokenService = require('../services/token-service');
 
 
 class AuthController {
@@ -58,12 +59,24 @@ class AuthController {
             return res.status(500).json({ message: 'Internal server error' });
         }
 
-        const tokens = TokenService.generateAccessToken({ id: user._id, phone });
+        const {accessToken,refreshToken} = TokenService.generateAccessToken({ id: user._id, phone });
+
+        await tokenService.storeRefreshToken(refreshToken,user._id)
+        res.cookie('refreshToken',refreshToken,{
+            maxAge:1000*60*60*24*30,
+            httpOnly:true,
+        });
+
+        res.cookie('accessToken',accessToken,{
+            maxAge:1000*60*60*24*30,
+            httpOnly:true,
+        });
+
         const userDto=new UserDto(user);
         return res.json({
             message: "OTP verified successfully",
             user:userDto,
-            ...tokens
+            auth:true
         });
     }
 }
