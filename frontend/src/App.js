@@ -51,15 +51,20 @@ const SemiProtectedRoute = ({ children }) => {
 };
 
 const ProtectedRoute = ({ children }) => {
-  const {user,isAuth}=useSelector((state)=>state.auth);
+  const { user, isAuth } = useSelector((state) => state.auth);
+  
+  // Check if the user is authenticated
   if (!isAuth) {
     return <Navigate to="/" replace />;
   }
   
-  if (isAuth && (!user && !user.activated)) {
+  // Check if the user is authenticated but not activated
+  if (isAuth && !user.activated) {
     return <Navigate to="/activate" replace />;
   }
 
+  // If authenticated and activated, allow access to the protected route
   return children;
 };
+
 export default App;
