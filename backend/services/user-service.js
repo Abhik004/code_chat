@@ -2,8 +2,13 @@ const userModel = require("../models/user-model");
 
 class UserService {
     async findUser(filter) {
-        const user = await userModel.findOne(filter);
-        return user;
+        try {
+            const user = await userModel.findOne(filter);
+            return user;
+        } catch (error) {
+            console.error('Error in findUser:', error);
+            throw error;
+        }
     }
 
     async createUser(data) {

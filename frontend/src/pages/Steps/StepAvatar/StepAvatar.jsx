@@ -19,16 +19,27 @@ const StepAvatar = ({onNext}) => {
       dispatch(setAvatar(reader.result));
     }
   }
-  async function submit(){
+  async function submit() {
     try {
-      const {data}=await activate({name,avatar});
-      if(data.auth){
-        dispatch(setAuth(data));
-      }
+        console.log("Submitting data:", { name, avatar });
+        const { data } = await activate({ name, avatar });
+        console.log("Activation response:", data);
+
+        if (data.auth) {
+            dispatch(setAuth(data));
+            if (onNext) {
+                onNext();
+            }
+        } else {
+            console.error("Activation failed:", data.message);
+        }
     } catch (error) {
-      console.log(error);
+        // console.error("Activation error:", error.response ? error.response.data : error.message);
+        console.log(error)
     }
-  }
+}
+
+
   return (
     <>
       <Card title={`Okay, ${name}`}

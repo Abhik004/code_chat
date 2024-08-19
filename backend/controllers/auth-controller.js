@@ -34,50 +34,48 @@ class AuthController {
 
     async verifyOtp(req, res) {
         const { otp, hash, phone } = req.body;
-
+    
         if (!otp || !hash || !phone) {
             return res.status(400).json({ message: "All fields are required" });
         }
-
+    
         const [hashOtp, expires] = hash.split('.');
         if (Date.now() > +expires) {
             return res.status(400).json({ message: "OTP expired" });
         }
-
+    
         const data = `${phone}.${otp}.${expires}`;
         const isValid = OtpService.verifyOtp(hashOtp, data);
-
+    
         if (!isValid) {
             return res.status(400).json({ message: "Invalid OTP" });
         }
-
-        let user;
+    
         try {
-            user = await UserService.findOrCreate({ phone }, { phone });
+            const user = await UserService.findOrCreate({ phone }, { phone });
+            const { accessToken, refreshToken } = TokenService.generateAccessToken({ id: user.id, phone });
+    
+            await tokenService.storeRefreshToken(refreshToken, user.id);
+            res.cookie('refreshToken', refreshToken, {
+                maxAge: 1000 * 60 * 60 * 24 * 30,
+                httpOnly: true,
+            });
+    
+            res.cookie('accessToken', accessToken, {
+                maxAge: 1000 * 60 * 60 * 24 * 30,
+                httpOnly: true,
+            });
+    
+            const userDto = new UserDto(user);
+            return res.json({
+                message: "OTP verified successfully",
+                user: userDto,
+                auth: true
+            });
         } catch (err) {
-            console.error('Error finding/creating user:', err);
+            console.error('Error verifying OTP:', err);
             return res.status(500).json({ message: 'Internal server error' });
         }
-
-        const {accessToken,refreshToken} = TokenService.generateAccessToken({ id: user._id, phone });
-
-        await tokenService.storeRefreshToken(refreshToken,user._id)
-        res.cookie('refreshToken',refreshToken,{
-            maxAge:1000*60*60*24*30,
-            httpOnly:true,
-        });
-
-        res.cookie('accessToken',accessToken,{
-            maxAge:1000*60*60*24*30,
-            httpOnly:true,
-        });
-
-        const userDto=new UserDto(user);
-        return res.json({
-            message: "OTP verified successfully",
-            user:userDto,
-            auth:true
-        });
     }
 }
 
