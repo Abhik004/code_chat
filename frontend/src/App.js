@@ -7,6 +7,8 @@ import Authenticate from './pages/Authenticate/Authenticate';
 import Activate from './pages/Activate/Activate';
 import Rooms from './pages/Rooms/Rooms';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh';
 // const isAuth = false; // Replace with actual authentication check
 // const user = {
 //   activated: false // Replace with actual activation check
@@ -14,7 +16,9 @@ import { useSelector } from 'react-redux';
 
 
 function App() {
-  return (
+  //call refresh endpoint
+  const {loading}=useLoadingWithRefresh();
+  return  loading?'Loading...':(
     <BrowserRouter>
       <Navigation />
       <Routes>
