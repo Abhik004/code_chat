@@ -9,6 +9,8 @@ import Rooms from './pages/Rooms/Rooms';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh';
+import Loader from './components/shared/Loader/Loader';
+
 // const isAuth = false; // Replace with actual authentication check
 // const user = {
 //   activated: false // Replace with actual activation check
@@ -18,7 +20,7 @@ import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh';
 function App() {
   //call refresh endpoint
   const {loading}=useLoadingWithRefresh();
-  return  loading?'Loading...':(
+  return  loading?(<Loader message="Loading please wait!"/>):(
     <BrowserRouter>
       <Navigation />
       <Routes>

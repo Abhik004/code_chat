@@ -10,7 +10,7 @@ import { setOtp } from '../../../../store/authSlice';
 const Phone = ({ onNext }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const dispatch = useDispatch();
-
+    if(!phoneNumber) return;
     async function submit() {
         const { data } = await sendOtp({ phone: phoneNumber });
         console.log(data);

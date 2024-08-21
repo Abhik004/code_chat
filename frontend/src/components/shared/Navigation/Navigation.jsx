@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import styles from './Navigation.module.css'
 import { logout } from '../../../http';
 import { setAuth } from '../../../store/authSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 const Navigation = () => {
     const brandStyle={
         color:'#fff',
@@ -16,7 +16,8 @@ const Navigation = () => {
     const logoText={
         marginLeft:'10px',
     }
-    const dispatch=useDispatch()
+    const dispatch=useDispatch();
+    const {isAuth}=useSelector((state)=>state.auth);
     async function logoutUser(){
       try {
         const {data}=await logout();
@@ -32,7 +33,7 @@ const Navigation = () => {
         <img src='/images/logo.png' alt='logo'/>
         <span style={logoText}>CodeChat!</span>
        </Link> 
-       <button onClick={logoutUser}>Logout</button>
+       {isAuth && <button onClick={logoutUser}>Logout</button>}
     </nav>
   )
 }
