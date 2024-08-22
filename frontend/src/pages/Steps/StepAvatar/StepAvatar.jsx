@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '../../../components/shared/Card/Card';
 import Button from '../../../components/shared/Button/Button';
 import styles from './StepAvatar.module.css';
@@ -12,6 +12,7 @@ const StepAvatar = ({onNext}) => {
   const {name,avatar}=useSelector((state)=>state.activate);
   const [image,setImage]=useState('/images/monkey-avatar.png');
   const[loading,setLoading]=useState(false);
+  const [unmounted,setUnmounted]=useState(false);
   function captureImage(e){
     const file=e.target.files[0];
     const reader=new FileReader();
@@ -29,9 +30,10 @@ const StepAvatar = ({onNext}) => {
         console.log("Activation response:", data);
 
         if (data.auth) {
-            dispatch(setAuth(data));
+          if(!unmounted){dispatch(setAuth(data));
             if (onNext) {
-                onNext();
+                onNext();}
+            
             }
         } else {
             console.error("Activation failed:", data.message);
@@ -43,6 +45,12 @@ const StepAvatar = ({onNext}) => {
       setLoading(false);
     }
 }
+
+useEffect(()=>{
+  return()=>{
+    setUnmounted(true);
+  }
+},[]);
 
 if (loading) return <Loader message="Activation in progress..."/>;
   return (

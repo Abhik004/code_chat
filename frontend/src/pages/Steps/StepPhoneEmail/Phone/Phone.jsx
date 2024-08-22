@@ -10,8 +10,8 @@ import { setOtp } from '../../../../store/authSlice';
 const Phone = ({ onNext }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const dispatch = useDispatch();
-    if(!phoneNumber) return;
     async function submit() {
+        if(!phoneNumber) return;
         const { data } = await sendOtp({ phone: phoneNumber });
         console.log(data);
         dispatch(setOtp({ phone: data.phone, hash: data.hash }));
@@ -29,7 +29,7 @@ const Phone = ({ onNext }) => {
                     <Button text="Next" onClick={submit} />
                 </div>
                 <p className={styles.bottomParagraph}>
-                    By entering your number, you’re agreeing to our Terms of
+                    By entering your number, you're agreeing to our Terms of
                     Service and Privacy Policy. Thanks!
                 </p>
             </div>
