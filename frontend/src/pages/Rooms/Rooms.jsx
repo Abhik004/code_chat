@@ -1,5 +1,43 @@
 import React from 'react'
 import styles from './Rooms.module.css'
+import RoomCard from '../../components/RoomCard/RoomCard'
+
+const rooms=[
+  {
+    id:1,
+    topic:'Which framework best for frontend?',
+    speakers:[
+      {
+        id:1,
+        name:'John Doe',
+        avatar: '/images/monkey-avatar.png',
+      },
+      {
+        id:2,
+        name:'John Doe',
+        avatar:'/images/monkey-avatar.png',
+      },
+    ],
+    totalPeople: 40,
+  },
+  {
+    id:2,
+    topic:'Is Java dead??',
+    speakers:[
+      {
+        id:1,
+        name:'John Doe',
+        avatar: '/images/monkey-avatar.png',
+      },
+      {
+        id:2,
+        name:'John Doe',
+        avatar:'/images/monkey-avatar.png',
+      },
+    ],
+    totalPeople: 30,
+  }
+]
 const Rooms = () => {
   return (
     <>
@@ -20,6 +58,11 @@ const Rooms = () => {
               <span>Start a Room!</span>
             </button>
           </div>
+        </div>
+        <div className={styles.roomList}>
+          {rooms.map((room)=>(
+            <RoomCard key={room.id} room={room}/>
+          ))}
         </div>
       </div>
     </>
