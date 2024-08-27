@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh';
 import Loader from './components/shared/Loader/Loader';
-
+import Room from './pages/Room/Room';
 // const isAuth = false; // Replace with actual authentication check
 // const user = {
 //   activated: false // Replace with actual activation check
@@ -28,6 +28,7 @@ function App() {
         <Route path="/authenticate" element={<GuestRoute><Authenticate /></GuestRoute>} />
         <Route path="/activate" element={<SemiProtectedRoute><Activate /></SemiProtectedRoute>} />
         <Route path="/rooms" element={<ProtectedRoute><Rooms /></ProtectedRoute>} />
+        <Route path="/room/:id" element={<ProtectedRoute><Room /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );
