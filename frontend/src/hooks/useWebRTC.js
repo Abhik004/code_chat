@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useStateWithCallback } from "./useStateWithCallback";
-export const useWebRTC=()=>{
-    const [clients,setClients]=useStateWithCallback([
+import { useRef } from "react";
+
+const users=[
         {
            id:1,
            name:'Rakesh K'
@@ -10,6 +11,13 @@ export const useWebRTC=()=>{
            id:2,
            name:'John Doe'
         }
-    ]);
-    return {clients};
+];
+
+export const useWebRTC=(roomId,user)=>{
+   const [clients,setClients]=useStateWithCallback(users);
+   const audioElements=useRef({});
+   const connections=useRef({});
+   const localMediaStream=useRef(null);
+
+   return {clients};
 };
