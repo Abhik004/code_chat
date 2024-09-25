@@ -40,7 +40,7 @@ app.get('/',(req,res)=>{
 
 const socketUserMapping={}
 io.on('connection',(socket)=>{
-    socket.ON(ACTIONS.JOIN,({roomId,user})=>{
+    socket.on(ACTIONS.JOIN,({roomId,user})=>{
         socketUserMapping[socket.id]=user;
 
         //new map
@@ -91,7 +91,7 @@ io.on('connection',(socket)=>{
             clients.forEach(clientId=>{
                 io.to(clientId).emit(ACTIONS.REMOVE_PEER,{
                     peerId:socket.id,
-                    userId:socketUserMapping[socket.id].id,
+                    userId:socketUserMapping[socket.id]?.id,
                 })
 
                 socket.emit(ACTIONS.REMOVE_PEER,{
